@@ -27,5 +27,9 @@ namespace ConsoleProjTemp
             public int Price { get => price; set => price = value; }
         }
 
+        public override void ToString(string _name, string _type, string _info, int _attack, string _rarity, int _price)
+        {
+            Console.WriteLine($"____________________\n- {_name} -\nType: {_type}\nDescription:\n{_info}\nDamage: {_attack} pts\nRarity: {_rarity}\nCost: {_price} units\n");
+        }
     }
 }

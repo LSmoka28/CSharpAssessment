@@ -6,24 +6,36 @@ using System.Threading.Tasks;
 
 namespace ConsoleProjTemp
 {
-    class Player
-    {
-
-        // add first name and location
-        public string playerName;
-        public string location;
-
-        public Player(string _playerName, string _location)
+    public class Player
+    {    
+        private string name;
+        Address address;       
+        public Player(string name, Address address)
         {
-            this.playerName = _playerName;
-            this.location = _location;
+            this.address = address;
+            this.name = name;
         }
 
-        public Player()
+        
+        
+        public void Display()
         {
-
+            Console.WriteLine($"{name} - {address.city}, {address.stateOrCountry}");
         }
 
 
     }
+    public class Address
+    {
+        public string city;
+        public string stateOrCountry;
+
+        public Address(string city, string stateOrCountry)
+        {
+            this.city = city;
+            this.stateOrCountry = stateOrCountry;
+        }
+
+    }
+
 }

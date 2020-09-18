@@ -8,13 +8,26 @@ namespace ConsoleProjTemp
 {
     class Item
     {
-        public string name;
-        public string type;
-        public string info;
-        public int attackPwr;
-        public int defense;
-        public string rarity;
-        public int price;
+        private string name;
+        private string type;
+        private string info;
+        private int attackPwr;
+        private int defense;
+        private string rarity;
+        private int price;
 
+        public string Name { get => name; set => name = value; }
+        public string Type { get => type; set => type = value; }
+        public string Info { get => info; set => info = value; }
+        public int AttackPwr { get => attackPwr; set => attackPwr = value; }
+        public int Defense { get => defense; set => defense = value; }
+        public string Rarity { get => rarity; set => rarity = value; }
+        public int Price { get => price; set => price = value; }
+
+
+        public virtual void ToString(string name, string type, string info, int attackOrDefense, string rarity, int price)
+        {
+            
+        }
     }
 }

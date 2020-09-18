@@ -29,6 +29,7 @@ namespace ConsoleProjTemp
         static public int armorNumber = 0;
 
 
+
         static void Main(string[] args)
         {
             Weapon.WeaponStruct[] shopWeapInv;
@@ -63,7 +64,9 @@ namespace ConsoleProjTemp
 
             bool gameRunning = true;
             bool gettingName = false;
-            Player player = new Player();
+            
+            
+            
 
             //store intro message
             Prompt($"Welcome to Fantasy Fanatics!\n" +
@@ -74,18 +77,26 @@ namespace ConsoleProjTemp
 
             while (!gettingName)
             {
+
                 // get player info and store as header to save file
                 Prompt($"May I have your name, please? It is for my records...");
-                player.playerName = Console.ReadLine().Trim();
+                string name = Console.ReadLine().Trim();
                 Prompt($"");
                 Prompt($"Where are you from?");
-                player.location = Console.ReadLine();
+                Prompt($"City: ");
+                string city = Console.ReadLine();
+                Prompt($"State or Country:");
+                string stateOrCountry = Console.ReadLine();
                 Prompt($"");
-                Prompt($"{player.playerName}, from {player.location}? Correct? ('y' or 'n')");
+
+                Player player = new Player(name, new Address(city, stateOrCountry));
+
+                player.Display();
+                Prompt($"Correct? ('y' or 'n')");
                 if (Console.ReadLine() == "y")
                 {
                     Prompt($"");
-                    Prompt($"Welcome, {player.playerName}!");
+                    Prompt($"Welcome, {name}!");
                     Prompt($"You have {playerBank} units in your bank");
                     Prompt($"");
                     gettingName = true;
@@ -100,7 +111,7 @@ namespace ConsoleProjTemp
 
             while (gameRunning)
             {
-                Prompt($"What would you like to do, {player.playerName}?");
+                Prompt($"What would you like to do?");
                 string input = Console.ReadLine().Trim().ToLower();
 
                 bool inputCommandDealtWith = false;
@@ -330,14 +341,9 @@ namespace ConsoleProjTemp
         static public void ViewAndBuyWeapon(List<Weapon.WeaponStruct> weaponList, List<Weapon.WeaponStruct> myWeaps, int indexNum)
         {
             Weapon.WeaponStruct tmpWeap = weaponList[indexNum - 1];
+            Item weapon = new Weapon();
 
-
-            Prompt($"____________________\n- {tmpWeap.Name} -\n" +
-                $"Type: {tmpWeap.Type}\n" +
-                $"Description:\n{tmpWeap.Info}\n" +
-                $"Damage: {tmpWeap.AttackPwr} pts\n" +
-                $"Rarity: {tmpWeap.Rarity}\n" +
-                $"Cost: {tmpWeap.Price} units\n");
+            weapon.ToString(tmpWeap.Name, tmpWeap.Type, tmpWeap.Info, tmpWeap.AttackPwr, tmpWeap.Rarity, tmpWeap.Price);
 
             if (playerBank <= 0)
             {
@@ -390,15 +396,10 @@ namespace ConsoleProjTemp
         // method to view a speciic armor and asks to purchase
         static public void ViewAndBuyArmor(List<Armor.ArmorStruct> armorList, List<Armor.ArmorStruct> myArmors, int indexNum)
         {
-
-
+            Item armor = new Armor();
             Armor.ArmorStruct tmpArmor = armorList[indexNum - 1];
-            Prompt($"____________________\n- {tmpArmor.Name} -\n" +
-                $"Type: {tmpArmor.Type}\n" +
-                $"Description:\n{tmpArmor.Info}\n" +
-                $"Defense: {tmpArmor.Defense} pts\n" +
-                $"Rarity: {tmpArmor.Rarity}\n" +
-                $"Cost: {tmpArmor.Price} units\n");
+
+            armor.ToString(tmpArmor.Name, tmpArmor.Type, tmpArmor.Info, tmpArmor.Defense, tmpArmor.Rarity, tmpArmor.Price);
 
             if (playerBank <= 0)
             {
@@ -448,7 +449,7 @@ namespace ConsoleProjTemp
         // method to sell a weapon
         static public void SellWeap(List<Weapon.WeaponStruct> myWeapInv, List<Weapon.WeaponStruct> weaponList, int indexNum)
         {
-            Weapon.WeaponStruct tmpWeap = weaponList[indexNum - 1];
+            Weapon.WeaponStruct tmpWeap = myWeapInv[indexNum - 1];
 
             Prompt($"____________________\n- {tmpWeap.Name} -\n" +
                 $"Type: {tmpWeap.Type}\n" +
@@ -548,17 +549,16 @@ namespace ConsoleProjTemp
         // shows all information of weapons in player inv
         static public void PlayerWeaponInv(List<Weapon.WeaponStruct> myWeaps)
         {
+            Item weapon = new Weapon();
             int numOfWeap = 0;
             Prompt($"\n----MY WEAPONS----\n     vvvvvvvv    \n");
             foreach (Weapon.WeaponStruct myInv in myWeaps)
             {
                 numOfWeap++;
-                Prompt($"____________________\n- {myInv.Name} - w{numOfWeap}\n" +
-                        $"Type: {myInv.Type}\n" +
-                        $"Description:\n{myInv.Info}\n" +
-                        $"Damage: {myInv.AttackPwr} pts\n" +
-                        $"Rarity: {myInv.Rarity}\n" +
-                        $"Cost: {myInv.Price} units");
+                Prompt($"-Weapon w{numOfWeap}-");
+                weapon.ToString(myInv.Name, myInv.Type, myInv.Info, myInv.AttackPwr, myInv.Rarity, myInv.Price);
+
+
             }
             Prompt($"\n     ^^^^^^^^    \n----MY WEAPONS----\n");
         }
@@ -566,17 +566,14 @@ namespace ConsoleProjTemp
         // shows all information of armor in player inv
         static public void PlayerArmorInv(List<Armor.ArmorStruct> myArmors)
         {
+            Item armor = new Armor();
             int numOfArmor = 0;
             Prompt($"\n----MY ARMOR----\n     vvvvvvvv    \n");
             foreach (Armor.ArmorStruct myInv in myArmors)
             {
                 numOfArmor++;
-                Prompt($"____________________\n- {myInv.Name} - a{numOfArmor}\n" +
-                        $"Type: {myInv.Type}\n" +
-                        $"Description:\n{myInv.Info}\n" +
-                        $"Defense: {myInv.Defense} pts\n" +
-                        $"Rarity: {myInv.Rarity}\n" +
-                        $"Cost: {myInv.Price} units");
+                Prompt($"-Armor a{numOfArmor}-");
+                armor.ToString(myInv.Name, myInv.Type, myInv.Info, myInv.Defense, myInv.Rarity, myInv.Price);
             }
             numOfArmor = 0;
             Prompt($"\n     ^^^^^^^^    \n----MY ARMOR----\n");
