@@ -19,7 +19,6 @@ namespace ConsoleProjTemp
         // TODO: need use of subclasses/ child and parent classes
         // TODO: save to text file after close
         // TODO: clean up code and case names
-        // TODO: proper end to game
 
         // set the player and shop bank amount
         static public int shopBank = 1000;

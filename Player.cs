@@ -8,8 +8,8 @@ namespace ConsoleProjTemp
 {
     class Player
     {
-        // add first name and location
 
+        // add first name and location
         public string playerName;
         public string location;
 
