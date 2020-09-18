@@ -14,7 +14,7 @@ namespace ConsoleProjTemp
     class Program
     {
 
-        // TODO: add use of polymorphism
+        // TODO: add use of polymorphism and aggregation
         // TODO: methods into a class?
         // TODO: need use of subclasses/ child and parent classes
         // TODO: save to text file after close
@@ -23,6 +23,7 @@ namespace ConsoleProjTemp
         // set the player and shop bank amount
         static public int shopBank = 1000;
         static public int playerBank = 1000;
+
         // variable for psuedo count of weapons and armor
         static public int weaponNumber = 0;
         static public int armorNumber = 0;
@@ -37,7 +38,7 @@ namespace ConsoleProjTemp
             List<Weapon.WeaponStruct> myWeaps = new List<Weapon.WeaponStruct>();
             List<Armor.ArmorStruct> myArmors = new List<Armor.ArmorStruct>();
 
-
+            // using csvhelper load .csv files
             using (var reader = new StreamReader("WeaponsSpread1.csv"))
             {
                 using (var csv = new CsvReader(reader, CultureInfo.InvariantCulture))
@@ -56,13 +57,12 @@ namespace ConsoleProjTemp
             }
 
             //convert weapon and armor array to list
-            List<Weapon.WeaponStruct> weaponList = shopWeapInv.ToList<Weapon.WeaponStruct>();
-            List<Armor.ArmorStruct> armorList = shopArmorInv.ToList<Armor.ArmorStruct>();
+            List<Weapon.WeaponStruct> weaponList = shopWeapInv.ToList();
+            List<Armor.ArmorStruct> armorList = shopArmorInv.ToList();
 
 
             bool gameRunning = true;
-
-
+            bool gettingName = false;
             Player player = new Player();
 
             //store intro message
@@ -72,7 +72,6 @@ namespace ConsoleProjTemp
                 $"Dont hesitate to ask for 'help' if you need any assistance!\n");
             Prompt($"First things first,");
 
-            bool gettingName = false;
             while (!gettingName)
             {
                 // get player info and store as header to save file
@@ -102,7 +101,6 @@ namespace ConsoleProjTemp
             while (gameRunning)
             {
                 Prompt($"What would you like to do, {player.playerName}?");
-
                 string input = Console.ReadLine().Trim().ToLower();
 
                 bool inputCommandDealtWith = false;
@@ -201,16 +199,18 @@ namespace ConsoleProjTemp
                     case "commands":
                     case "inputs":
                     case "h":
-                        Prompt($"Use the valid commands below to shop the store\n Remember to type 'help' anytime you get stuck.");
+                        Prompt($"Use the valid commands below to shop the store\nRemember to type 'help' anytime you get stuck.");
                         Prompt($"__________________\nThe current valid commands you can type in are:\n" +
-                            $"-show armor, show a, armor, defense  - shows current shop armor inventory \n" +
-                            $"-inventory, my bag, my inv, bag, inv, i - shows current player inventory \n" +
-                            $"-weapons, show weap, show w, weap - shows current shop weapon inventory \n" +
-                            $"-shop, shop inv, show, s - shows the full available inventory \n" +
-                            $"-commands, inputs, help, h  - shows the help screen and game instructions \n" +
-                            $"-esc, quit, leave, bye - closes the shop and window \n" +
-                            $"-y - confirm selection \n" +
-                            $"-n - decline selection");
+                            $"- show armor, show a, armor, defense  - shows current shop armor inventory \n" +
+                            $"- inventory, my bag, my inv, bag, inv, i - shows current player inventory \n" +
+                            $"- weapons, show weap, show w, weap - shows current shop weapon inventory \n" +
+                            $"- shop, shop inv, show, s - shows the full available inventory \n" +
+                            $"- commands, inputs, help, h  - shows the help screen and game instructions \n" +
+                            $"- esc, quit, leave, bye - closes the shop and window \n" +
+                            $"- w1-w10 - use w and a corresponding number 1-10, to view that specific numbred weapon\n" +
+                            $"- a1-a10 - use a and a corresponding number 1-10, to view that specific numbred weapon\n" +
+                            $"- y - confirm selection \n" +
+                            $"- n - decline selection");
                         break;
 
                     // quit and esc commands
