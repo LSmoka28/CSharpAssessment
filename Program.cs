@@ -13,10 +13,6 @@ namespace ConsoleProjTemp
 {
     class Program
     {
-
-        // TODO: add use of polymorphism and aggregation
-        // TODO: methods into a class?
-        // TODO: need use of subclasses/ child and parent classes
         // TODO: save to text file after close
         // TODO: clean up code and case names
 
@@ -32,12 +28,9 @@ namespace ConsoleProjTemp
 
         static void Main(string[] args)
         {
+            // create array of weapon and armor class structs before csv load and list conversion
             Weapon.WeaponStruct[] shopWeapInv;
             Armor.ArmorStruct[] shopArmorInv;
-
-            // create an empty list to add armor and weapons from shop
-            List<Weapon.WeaponStruct> myWeaps = new List<Weapon.WeaponStruct>();
-            List<Armor.ArmorStruct> myArmors = new List<Armor.ArmorStruct>();
 
             // using csvhelper load .csv files
             using (var reader = new StreamReader("WeaponsSpread1.csv"))
@@ -57,43 +50,51 @@ namespace ConsoleProjTemp
                 }
             }
 
-            //convert weapon and armor array to list
+
+
+            // conversion of weapon and armor arrays to a list
             List<Weapon.WeaponStruct> weaponList = shopWeapInv.ToList();
             List<Armor.ArmorStruct> armorList = shopArmorInv.ToList();
 
+            // create an empty list to add armor and weapons from shop for player inventory
+            List<Weapon.WeaponStruct> myWeaps = new List<Weapon.WeaponStruct>();
+            List<Armor.ArmorStruct> myArmors = new List<Armor.ArmorStruct>();
 
-            bool gameRunning = true;
-            bool gettingName = false;
-            
-            
             
 
-            //store intro message
+
+
+
+            #region Store Introduction and Player ID
+            // store intro message
             Prompt($"Welcome to Fantasy Fanatics!\n" +
                 $"I have a wide variety of items once belonging to video games, comics, and movies.\n" +
                 $"Dont ask how I got them, just enjoy it while you can.\n" +
                 $"Dont hesitate to ask for 'help' if you need any assistance!\n");
             Prompt($"First things first,");
 
+
+            // loop for getting player name and location, and check to confirm with player
+            bool gettingName = false;
             while (!gettingName)
             {
 
-                // get player info and store as header to save file
+                // get player name and location
                 Prompt($"May I have your name, please? It is for my records...");
                 string name = Console.ReadLine().Trim();
                 Prompt($"");
-                Prompt($"Where are you from?");
+                Prompt($"Where are you from? City and State/Country, please");
                 Prompt($"City: ");
-                string city = Console.ReadLine();
+                string city = Console.ReadLine().Trim();
                 Prompt($"State or Country:");
-                string stateOrCountry = Console.ReadLine();
+                string stateOrCountry = Console.ReadLine().Trim();
                 Prompt($"");
 
                 Player player = new Player(name, new Address(city, stateOrCountry));
 
                 player.Display();
                 Prompt($"Correct? ('y' or 'n')");
-                if (Console.ReadLine() == "y")
+                if (Console.ReadLine().Trim().ToLower() == "y")
                 {
                     Prompt($"");
                     Prompt($"Welcome, {name}!");
@@ -107,8 +108,10 @@ namespace ConsoleProjTemp
                 }
 
             }
+            #endregion
 
-
+            #region Main Game Loop
+            bool gameRunning = true;
             while (gameRunning)
             {
                 Prompt($"What would you like to do?");
@@ -141,13 +144,14 @@ namespace ConsoleProjTemp
                         break;
 
                     // sell weapon or armor
+                    // includes check for player selection out of list range
                     case "sell":
+                    case "trade":
                         Prompt($"Pick an item to sell (w1-w10 or a1-a10)");
                         input = Console.ReadLine().Trim().ToLower();
                         char sellInput = input[0];
                         switch (sellInput)
                         {
-
                             case 'w':
                                 int tmpWNum;
                                 input = input.Replace('w', ' ');
@@ -199,7 +203,6 @@ namespace ConsoleProjTemp
                     case "shop":
                     case "shop inv":
                     case "show":
-                    case "s":
                         ShowWeapons(weaponList);
                         ShowArmor(armorList);
                         inputCommandDealtWith = true;
@@ -211,17 +214,18 @@ namespace ConsoleProjTemp
                     case "inputs":
                     case "h":
                         Prompt($"Use the valid commands below to shop the store\nRemember to type 'help' anytime you get stuck.");
-                        Prompt($"__________________\nThe current valid commands you can type in are:\n" +
+                        Prompt($"__________________\nThe current valid commands you can type in are: \n" +
                             $"- show armor, show a, armor, defense  - shows current shop armor inventory \n" +
-                            $"- inventory, my bag, my inv, bag, inv, i - shows current player inventory \n" +
                             $"- weapons, show weap, show w, weap - shows current shop weapon inventory \n" +
-                            $"- shop, shop inv, show, s - shows the full available inventory \n" +
+                            $"- inventory, my bag, my inv, bag, inv, i - shows current player inventory \n" +
+                            $"- shop, shop inv, show - shows the full available shop inventory \n" +
+                            $"- sell, trade - sell items back to the shop. for a weapon selection(w1-w10) or a armor selection(a1-a10) \n" +
                             $"- commands, inputs, help, h  - shows the help screen and game instructions \n" +
                             $"- esc, quit, leave, bye - closes the shop and window \n" +
-                            $"- w1-w10 - use w and a corresponding number 1-10, to view that specific numbred weapon\n" +
-                            $"- a1-a10 - use a and a corresponding number 1-10, to view that specific numbred weapon\n" +
+                            $"- w1-w10 - use w and a corresponding number 1-10, to view that specific numbred weapon \n" +
+                            $"- a1-a10 - use a and a corresponding number 1-10, to view that specific numbred weapon \n" +
                             $"- y - confirm selection \n" +
-                            $"- n - decline selection");
+                            $"- n - decline selection \n");
                         break;
 
                     // quit and esc commands
@@ -233,6 +237,13 @@ namespace ConsoleProjTemp
                             $"{myWeaps.Count} weapon(s), and {myArmors.Count} piece(s) of armor.\n" +
                             $"Please come again.");
                         gameRunning = false;
+                        break;
+                    
+                        // work in progress, save and exit game
+                    case "save":
+                        Console.WriteLine("Enter a save file name:");
+                        string fileName = Console.ReadLine();
+                        string pathString = @"C:\Users\larry\OneDrive\Desktop\Intro to Csharp\CSharpAssessment\CSharpAssessmentProject";
                         break;
 
                 }
@@ -289,13 +300,17 @@ namespace ConsoleProjTemp
                 }
             }
             Console.ReadKey();
+            #endregion
+
+
         }
 
+        #region Methods for Showing, Buying and Selling
         // shows all weapon names and numbers
         static public void ShowWeapons(List<Weapon.WeaponStruct> weaponList)
         {
 
-            Prompt($"\n");
+            Prompt($"");
             Prompt($"\n----WEAPONS----\n     vvvvv    \n");
             foreach (Weapon.WeaponStruct tmpWeap in weaponList)
             {
@@ -305,7 +320,7 @@ namespace ConsoleProjTemp
 
             }
             weaponNumber = 0;
-            Prompt($"\n     ^^^^^    \n----WEAPONS----\n");
+            Prompt($"\n     ^^^^^    \n----WEAPONS----");
 
             if (playerBank <= 0)
             {
@@ -318,7 +333,7 @@ namespace ConsoleProjTemp
         //shows all armor names and numbers
         static public void ShowArmor(List<Armor.ArmorStruct> armorList)
         {
-            Prompt($"\n");
+            Prompt($"");
             Prompt($"\n----ARMOR----\n     vvv    \n");
             foreach (Armor.ArmorStruct tmpArmor in armorList)
             {
@@ -327,7 +342,7 @@ namespace ConsoleProjTemp
 
             }
             armorNumber = 0;
-            Prompt($"\n     ^^^    \n----ARMOR----\n");
+            Prompt($"\n     ^^^    \n----ARMOR----");
 
             if (playerBank <= 0)
             {
@@ -446,7 +461,7 @@ namespace ConsoleProjTemp
 
         }
 
-        // method to sell a weapon
+        // method to sell a specific weapon
         static public void SellWeap(List<Weapon.WeaponStruct> myWeapInv, List<Weapon.WeaponStruct> weaponList, int indexNum)
         {
             Weapon.WeaponStruct tmpWeap = myWeapInv[indexNum - 1];
@@ -578,6 +593,7 @@ namespace ConsoleProjTemp
             numOfArmor = 0;
             Prompt($"\n     ^^^^^^^^    \n----MY ARMOR----\n");
         }
+        #endregion
 
         // simple method for writing prompts
         static public void Prompt(string prompt)
