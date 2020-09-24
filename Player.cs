@@ -8,7 +8,7 @@ namespace ConsoleProjTemp
 {
     public class Player
     {    
-        private string name;
+        string name;
         Address address;       
         public Player(string name, Address address)
         {
