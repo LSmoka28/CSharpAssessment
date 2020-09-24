@@ -97,9 +97,9 @@ namespace ConsoleProjTemp
                 if (Console.ReadLine().Trim().ToLower() == "y")
                 {
                     Prompt($"");
-                    Prompt($"Welcome, {name}!");
-                    Prompt($"You have {playerBank} units in your bank");
-                    Prompt($"");
+                    Prompt($"Welcome, {name}!\n");
+                    Prompt($"You have {playerBank} units in your bank\n");
+                    
                     gettingName = true;
                 }
                 else
@@ -140,6 +140,7 @@ namespace ConsoleProjTemp
                     case "i":
                         PlayerArmorInv(myArmors);
                         PlayerWeaponInv(myWeaps);
+                        Prompt($"Bank: {playerBank} units");
                         inputCommandDealtWith = true;
                         break;
 
@@ -185,8 +186,7 @@ namespace ConsoleProjTemp
                                        $"Please pick again and dont forget to check your inventory to see what numbers correspond to each armor\n" +
                                        $"_______________");
                                 }
-                                break;
-
+                                break;                       
                         }
                         break;
 
@@ -221,7 +221,8 @@ namespace ConsoleProjTemp
                             $"- shop, shop inv, show - shows the full available shop inventory \n" +
                             $"- sell, trade - sell items back to the shop. for a weapon selection(w1-w10) or a armor selection(a1-a10) \n" +
                             $"- commands, inputs, help, h  - shows the help screen and game instructions \n" +
-                            $"- esc, quit, leave, bye - closes the shop and window \n" +
+                            $"- esc, quit, leave, bye, save - asks the user to save or quit without saving\n" +
+                            $"- load - load the last saved shop inv user enetered file for player inventory\n" +
                             $"- w1-w10 - use w and a corresponding number 1-10, to view that specific numbred weapon \n" +
                             $"- a1-a10 - use a and a corresponding number 1-10, to view that specific numbred weapon \n" +
                             $"- y - confirm selection \n" +
@@ -233,18 +234,117 @@ namespace ConsoleProjTemp
                     case "quit":
                     case "leave":
                     case "bye":
+                    case "save":
                         Prompt($"\nThanks for shopping with us! You ended with {playerBank} units in your bank, " +
                             $"{myWeaps.Count} weapon(s), and {myArmors.Count} piece(s) of armor.\n" +
-                            $"Please come again.");
-                        gameRunning = false;
+                            $"Would you like to save your progress?");
+                        Prompt($"Enter 'y' if you would like to save\nEnter 'n' if you would like to quit without saving");
+                        string saveOrQuit = Console.ReadLine().ToLower().Trim();
+                        switch (saveOrQuit)
+                        {
+                            case"y":
+                                {
+                                    Prompt($"Enter a name for your weapon save file\nLETTERS(a-z) and/or NUMBERS(0-9) only, no spaces or special characters\n");
+                                    string saveWeapName = Console.ReadLine();
+
+                                    using (var writer = new StreamWriter($"{saveWeapName}.csv"))
+                                    using (var csv = new CsvWriter(writer, CultureInfo.InvariantCulture))
+                                    {
+                                        csv.WriteRecords(myWeaps);
+                                    }
+                                    Prompt($"...");
+                                    Prompt($"Weapons file saved as {saveWeapName}.csv\n");
+                                }
+                                {
+                                    Prompt($"Enter a name for your armor save file\nLETTERS(a-z) and/or NUMBERS(0-9) only, no spaces or special characters\n");
+                                    string saveArmorName = Console.ReadLine();
+
+                                    using (var writer = new StreamWriter($"{saveArmorName}.csv"))
+                                    using (var csv = new CsvWriter(writer, CultureInfo.InvariantCulture))
+                                    {
+                                        csv.WriteRecords(myArmors);
+                                    }
+                                    Prompt($"...");
+                                    Prompt($"Armor file saved as {saveArmorName}.csv\n");
+                                }
+                                {
+                                    using (var writer = new StreamWriter("ShopArmorSave.csv"))
+                                    using (var csv = new CsvWriter(writer, CultureInfo.InvariantCulture))
+                                    {
+                                        csv.WriteRecords(armorList);
+                                    }
+                                    Prompt($"...");
+                                    Prompt($"Shop armor file saved as ShopArmorSave.csv\n");
+                                }
+                                {
+
+                                    using (var writer = new StreamWriter("ShopWeaponSave.csv"))
+                                    using (var csv = new CsvWriter(writer, CultureInfo.InvariantCulture))
+                                    {
+                                        csv.WriteRecords(weaponList);
+                                    }
+                                    Prompt($"...");
+                                    Prompt($"Shop weapon file saved as ShopWeaponSave.csv\n");
+                                }
+                                Prompt($"Please come again.");
+                                gameRunning = false;
+                                break;
+
+                            case "n":
+                                Prompt($"Please come again.");
+                                gameRunning = false;
+                                break;                         
+                        }
+                        break;
+
+                    // work in progress, save and exit game
+
+                    case "load":
+                        {
+                            using (var reader = new StreamReader("ShopWeaponSave.csv"))
+                            {
+                                using (var csv = new CsvReader(reader, CultureInfo.InvariantCulture))
+                                {
+                                    weaponList = csv.GetRecords<Weapon.WeaponStruct>().ToList<Weapon.WeaponStruct>();
+                                }
+                            }
+                        }
+                        {
+                            using (var reader = new StreamReader("ShopArmorSave.csv"))
+                            {
+                                using (var csv = new CsvReader(reader, CultureInfo.InvariantCulture))
+                                {
+                                    armorList = csv.GetRecords<Armor.ArmorStruct>().ToList<Armor.ArmorStruct>();
+                                }
+                            }
+                        }
+                        Prompt($"Loaded ShopArmorSave and ShopWeaponSave\n");
+                        Prompt($"What weapon save you trying to load? Just enter the file name, no extension required\n");
+                        string loadWeap = Console.ReadLine().Trim();
+                        {
+                            using (var reader = new StreamReader($"{loadWeap}.csv"))
+                            {
+                                using (var csv = new CsvReader(reader, CultureInfo.InvariantCulture))
+                                {
+                                    myWeaps = csv.GetRecords<Weapon.WeaponStruct>().ToList<Weapon.WeaponStruct>();
+                                }
+                            }
+                            Prompt($"{loadWeap} loaded successfully");
+                        }
+                        Prompt($"What armor save are you trying to load? Just enter the file name, no extension required\n");
+                        string loadArmor = Console.ReadLine().Trim();
+                        {
+                            using (var reader = new StreamReader($"{loadArmor}.csv"))
+                            {
+                                using (var csv = new CsvReader(reader, CultureInfo.InvariantCulture))
+                                {
+                                    myArmors = csv.GetRecords<Armor.ArmorStruct>().ToList<Armor.ArmorStruct>();
+                                }
+                            }
+                            Prompt($"{loadArmor} loaded successfully");
+                        }
                         break;
                     
-                        // work in progress, save and exit game
-                    case "save":
-                        Console.WriteLine("Enter a save file name:");
-                        string fileName = Console.ReadLine();
-                        string pathString = @"C:\Users\larry\OneDrive\Desktop\Intro to Csharp\CSharpAssessment\CSharpAssessmentProject";
-                        break;
 
                 }
                 // gets 'a' or 'w' for choosing an item to view
@@ -289,8 +389,7 @@ namespace ConsoleProjTemp
                                    $"Please pick again and dont forget to check the armor list to see what numbers correspond to each armor\n" +
                                    $"_______________");
                             }
-                            break;
-
+                            break;                        
                     }
 
 
@@ -306,7 +405,7 @@ namespace ConsoleProjTemp
         }
 
         #region Methods for Showing, Buying and Selling
-        // shows all weapon names and numbers
+        // shows all weapon names, prices and numbers
         static public void ShowWeapons(List<Weapon.WeaponStruct> weaponList)
         {
 
@@ -316,7 +415,9 @@ namespace ConsoleProjTemp
             {
 
                 weaponNumber++;
-                Prompt($"-{tmpWeap.Name}- w{weaponNumber}\n_______________");
+                Prompt($"(w{weaponNumber}) - {tmpWeap.Name}\n" +
+                    $"-{tmpWeap.Price} units-" +
+                    $"\n_______________");
 
             }
             weaponNumber = 0;
@@ -338,7 +439,9 @@ namespace ConsoleProjTemp
             foreach (Armor.ArmorStruct tmpArmor in armorList)
             {
                 armorNumber++;
-                Prompt($"-{tmpArmor.Name}- a{armorNumber}\n_______________");
+                Prompt($"(a{armorNumber}) - {tmpArmor.Name}\n" +
+                    $"-{tmpArmor.Price} units-" +
+                    $"\n_______________");
 
             }
             armorNumber = 0;
@@ -589,8 +692,7 @@ namespace ConsoleProjTemp
                 numOfArmor++;
                 Prompt($"-Armor a{numOfArmor}-");
                 armor.ToString(myInv.Name, myInv.Type, myInv.Info, myInv.Defense, myInv.Rarity, myInv.Price);
-            }
-            numOfArmor = 0;
+            }           
             Prompt($"\n     ^^^^^^^^    \n----MY ARMOR----\n");
         }
         #endregion
