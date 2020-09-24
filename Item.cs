@@ -4,8 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ConsoleProjTemp
+namespace CSharpAssessmentProject
 {
+    //base item class for printing child class values
     class Item
     {
         private string name;

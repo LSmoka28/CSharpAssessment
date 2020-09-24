@@ -1,13 +1,15 @@
-﻿using System;
+﻿using CSharpAssessmentProject;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace ConsoleProjTemp
+namespace CSharpAssessmentProject
 {
     public class Player
-    {    
+    {
+        
         string name;
         Address address;       
         public Player(string name, Address address)
@@ -17,7 +19,7 @@ namespace ConsoleProjTemp
         }
 
         
-        
+        // prints player info to the console
         public void Display()
         {
             Console.WriteLine($"{name} - {address.city}, {address.stateOrCountry}");
@@ -25,17 +27,6 @@ namespace ConsoleProjTemp
 
 
     }
-    public class Address
-    {
-        public string city;
-        public string stateOrCountry;
 
-        public Address(string city, string stateOrCountry)
-        {
-            this.city = city;
-            this.stateOrCountry = stateOrCountry;
-        }
-
-    }
-
+    
 }

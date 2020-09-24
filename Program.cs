@@ -10,7 +10,7 @@ using System.Globalization;
 using System.Security.Cryptography.X509Certificates;
 using System.CodeDom;
 
-namespace ConsoleProjTemp
+namespace CSharpAssessmentProject
 {
     class Program
     {
@@ -27,7 +27,7 @@ namespace ConsoleProjTemp
 
 
 
-        static void Main(string[] args)
+        static void Main()
         {
             // create array of weapon and armor class structs before csv load and list conversion
             Weapon.WeaponStruct[] shopWeapInv;
@@ -85,24 +85,30 @@ namespace ConsoleProjTemp
                 string stateOrCountry = Console.ReadLine().Trim();
                 Prompt($"");
 
-                // add new player after reading player name and location from console
-                Player player = new Player(name, new Address(city, stateOrCountry));
-
-                player.Display();
-                Prompt($"Correct? ('y' or 'n')");
-                if (Console.ReadLine().Trim().ToLower() == "y")
+                if (name == "" || city == "" || stateOrCountry == "")
                 {
-                    Prompt($"");
-                    Prompt($"Welcome, {name}!\n");
-                    Prompt($"You have {playerBank} units in your bank\n");
-                    
-                    gettingName = true;
+                    Prompt($"Name/City/State/Country cannot be blank\nPlease enter valid characters\n");
                 }
                 else
                 {
-                    Prompt($"Sorry, I must have misheard...");
-                }
+                    // add new player after reading player name and location from console
+                    Player player = new Player(name, new Address(city, stateOrCountry));
 
+                    player.Display();
+                    Prompt($"Correct? ('y' or 'n')");
+                    if (Console.ReadLine().Trim().ToLower() == "y")
+                    {
+                        Prompt($"");
+                        Prompt($"Welcome, {name}!\n");
+                        Prompt($"You have {playerBank} units in your bank\n");
+
+                        gettingName = true;
+                    }
+                    else
+                    {
+                        Prompt($"Sorry, I must have misheard...");
+                    }
+                }
             }
             #endregion
 
@@ -300,9 +306,11 @@ namespace ConsoleProjTemp
                     // loads last saved shop inventory
                     // asks user to enter a load file for player weap and armor inv
                     case "load":
+                        
                         bool loading = true;
                         while (loading)
                         {
+                            bool armorLoad = true;
                             Prompt($"What weapon save are you trying to load? Just enter the file name, no extension required\n");
                             {
                                 int numberOfTries = 0;
@@ -329,10 +337,11 @@ namespace ConsoleProjTemp
                                         if (++numberOfTries == maxNumOfTries)
                                         {
                                             Prompt($"You have reached the maximun amount of tries to load your inventory\nPlease check your inventory to make sure there is a file to load.");
-                                            weapLoad = false;
                                             loading = false;
+                                            armorLoad = false;
                                             
-                                            
+
+
                                         }
                                         Prompt($"You may have tried loading the wrong inventory file\nMake sure you are loading your WEAPON save file");
                                     }
@@ -343,90 +352,92 @@ namespace ConsoleProjTemp
                                         if (++numberOfTries == maxNumOfTries)
                                         {
                                             Prompt($"You have reached the maximun amount of tries to load your inventory\nPlease check your inventory to make sure there is a file to load.");
-                                            
-                                            
+                                            armorLoad = false;
+                                            loading = false;
                                             break;
                                         }
-                                        
+
                                     }
                                 }
-                                
+
                             }
-                            
 
-                            Prompt($"What armor save are you trying to load? Just enter the file name, no extension required\n");
+
                             {
-                                int numberOfTries = 0;
-                                int maxNumOfTries = 3;
-                                bool armorLoad = true;
-                                while (armorLoad)
+                                if (armorLoad)
                                 {
-                                    string loadArmor = Console.ReadLine().Trim();
 
-                                    try
+                                    Prompt($"What armor save are you trying to load? Just enter the file name, no extension required\n");
+                                    int numberOfTries = 0;
+                                    int maxNumOfTries = 3;
+
+                                    while (armorLoad)
                                     {
-                                        using (var reader = new StreamReader($"{loadArmor}.csv"))
+                                        string loadArmor = Console.ReadLine().Trim();
+
+                                        try
                                         {
-                                            using (var csv = new CsvReader(reader, CultureInfo.InvariantCulture))
+                                            using (var reader = new StreamReader($"{loadArmor}.csv"))
                                             {
-                                                myArmors = csv.GetRecords<Armor.ArmorStruct>().ToList<Armor.ArmorStruct>();
+                                                using (var csv = new CsvReader(reader, CultureInfo.InvariantCulture))
+                                                {
+                                                    myArmors = csv.GetRecords<Armor.ArmorStruct>().ToList<Armor.ArmorStruct>();
+                                                }
+                                            }
+                                            Prompt($"{loadArmor} loaded successfully");
+                                            
+                                            loading = false;
+                                        }
+                                        catch (HeaderValidationException)
+                                        {
+                                            if (++numberOfTries == maxNumOfTries)
+                                            {
+                                                Prompt($"You have reached the maximun amount of tries to load your inventory\nPlease check your inventory to make sure there is a file to load.");
+                                                
+                                                loading = false;
+                                            }
+                                            Prompt($"You may have tried loading the wrong file\nMake sure you are loading your ARMOR save file");
+                                        }
+                                        catch (FileNotFoundException)
+                                        {
+                                            Prompt($"*File Not Found*");
+                                            Prompt($"Check the armor save file name and try again\n");
+                                            if (++numberOfTries == maxNumOfTries)
+                                            {
+                                                Prompt($"You have reached the maximun amount of tries to load your inventory\nPlease check your inventory to make sure there is a file to load.");
+                                                myWeaps.Clear();
+                                                armorLoad = false;
+                                                loading = false;
+                                                
                                             }
                                         }
-                                        Prompt($"{loadArmor} loaded successfully");
-                                        armorLoad = false;
-                                        loading = false;
+
                                     }
-                                    catch (HeaderValidationException)
+                                }
+                            }
+
+                            if (loading)
+                            {
+                                {
+                                    using (var reader = new StreamReader("ShopWeaponSave.csv"))
                                     {
-                                        if (++numberOfTries == maxNumOfTries)
+                                        using (var csv = new CsvReader(reader, CultureInfo.InvariantCulture))
                                         {
-                                            Prompt($"You have reached the maximun amount of tries to load your inventory\nPlease check your inventory to make sure there is a file to load.");
-                                            armorLoad = false;
-                                            loading = false;
-                                        }
-                                        Prompt($"You may have tried loading the wrong file\nMake sure you are loading your ARMOR save file");
-                                    }
-                                    catch (FileNotFoundException)
-                                    {
-                                        Prompt($"*File Not Found*");
-                                        Prompt($"Check the armor save file name and try again\n");
-                                        if (++numberOfTries == maxNumOfTries)
-                                        {
-                                            Prompt($"You have reached the maximun amount of tries to load your inventory\nPlease check your inventory to make sure there is a file to load.");
-                                            armorLoad = false;
-                                            loading = false;
+                                            weaponList = csv.GetRecords<Weapon.WeaponStruct>().ToList<Weapon.WeaponStruct>();
                                         }
                                     }
-                                    
                                 }
-
-                            }
-                            
-                            if (loading == true)
-                            {
-
-                            }
-                            // loads last shop weapon inv save
-                            {
-                                using (var reader = new StreamReader("ShopWeaponSave.csv"))
+                                // loads last shop armor inv save
                                 {
-                                    using (var csv = new CsvReader(reader, CultureInfo.InvariantCulture))
+                                    using (var reader = new StreamReader("ShopArmorSave.csv"))
                                     {
-                                        weaponList = csv.GetRecords<Weapon.WeaponStruct>().ToList<Weapon.WeaponStruct>();
+                                        using (var csv = new CsvReader(reader, CultureInfo.InvariantCulture))
+                                        {
+                                            armorList = csv.GetRecords<Armor.ArmorStruct>().ToList<Armor.ArmorStruct>();
+                                        }
                                     }
                                 }
                             }
-                            // loads last shop armor inv save
-                            {
-                                using (var reader = new StreamReader("ShopArmorSave.csv"))
-                                {
-                                    using (var csv = new CsvReader(reader, CultureInfo.InvariantCulture))
-                                    {
-                                        armorList = csv.GetRecords<Armor.ArmorStruct>().ToList<Armor.ArmorStruct>();
-                                    }
-                                }
-                            }
-                            Prompt($"\nLoaded ShopArmorSave and ShopWeaponSave to Shop Inventories\n");
                         }
                         break;
                     
@@ -436,58 +447,57 @@ namespace ConsoleProjTemp
                 // removes 'a' or 'w' to get number associated with proper inventory
                 if (!inputCommandDealtWith)
                 {
-                    char firstLetter = input[0];
-
-
-                    switch (firstLetter)
+                    try
                     {
+                        char firstLetter = input[0];
 
-                        case 'w':
-                            int tmpWNum;
-                            input = input.Replace('w', ' ');
-                            int.TryParse(input, out tmpWNum);
-                            Prompt($"\nYou chose to view weapon number {tmpWNum}");
-                            try
-                            {
-                                ViewAndBuyWeapon(weaponList, myWeaps, tmpWNum);
-                            }
-                            catch (ArgumentOutOfRangeException)
-                            {
+                        switch (firstLetter)
+                        {
 
-                                Prompt($"You entered an invalid weapon selection\n" +
-                                    $"Please pick again and dont forget to check the weapon list to see what numbers correspond to each weapon\n" +
-                                    $"_______________");
-                            }
-                            break;
+                            case 'w':
+                                int tmpWNum;
+                                input = input.Replace('w', ' ');
+                                int.TryParse(input, out tmpWNum);
+                                Prompt($"\nYou chose to view weapon number {tmpWNum}");
+                                try
+                                {
+                                    ViewAndBuyWeapon(weaponList, myWeaps, tmpWNum);
+                                }
+                                catch (ArgumentOutOfRangeException)
+                                {
 
-                        case 'a':
-                            input = input.Replace('a', ' ');
-                            int tmpANum;
-                            int.TryParse(input, out tmpANum);
-                            Prompt($"\nYou chose to view armor number {tmpANum}");
-                            try
-                            {
-                                ViewAndBuyArmor(armorList, myArmors, tmpANum);
-                            }
-                            catch (ArgumentOutOfRangeException)
-                            {
-                                Prompt($"You entered an invalid armor selection\n" +
-                                   $"Please pick again and dont forget to check the armor list to see what numbers correspond to each armor\n" +
-                                   $"_______________");
-                            }
-                            break;                        
+                                    Prompt($"You entered an invalid weapon selection\n" +
+                                        $"Please pick again and dont forget to check the weapon list to see what numbers correspond to each weapon\n" +
+                                        $"_______________");
+                                }
+                                break;
+
+                            case 'a':
+                                input = input.Replace('a', ' ');
+                                int tmpANum;
+                                int.TryParse(input, out tmpANum);
+                                Prompt($"\nYou chose to view armor number {tmpANum}");
+                                try
+                                {
+                                    ViewAndBuyArmor(armorList, myArmors, tmpANum);
+                                }
+                                catch (ArgumentOutOfRangeException)
+                                {
+                                    Prompt($"You entered an invalid armor selection\n" +
+                                       $"Please pick again and dont forget to check the armor list to see what numbers correspond to each armor\n" +
+                                       $"_______________");
+                                }
+                                break;
+                        }
                     }
-
-
-
-
-
+                    catch (IndexOutOfRangeException)
+                    {
+                        Prompt($"\nYou must enter something into the console\nType 'help' for more instructions\n");
+                    }
                 }
             }
             Console.ReadKey();
             #endregion
-
-
         }
 
         #region Methods for Showing, Buying and Selling
@@ -788,8 +798,5 @@ namespace ConsoleProjTemp
         {
             Console.WriteLine(prompt);
         }
-
     }
-
-
 }

@@ -6,7 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.IO;
 
-namespace ConsoleProjTemp
+namespace CSharpAssessmentProject
 {
     class Weapon : Item
     {
@@ -27,6 +27,7 @@ namespace ConsoleProjTemp
             public int Price { get => price; set => price = value; }
         }
 
+        // prints the values of the struct to the console, overrides parent method
         public override void ToString(string name, string type, string info, int attack, string rarity, int price)
         {
             Console.WriteLine($"____________________\n- {name} -\nType: {type}\nDescription:\n{info}\nDamage: {attack} pts\nRarity: {rarity}\nCost: {price} units\n");
