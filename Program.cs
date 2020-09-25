@@ -247,57 +247,60 @@ namespace CSharpAssessmentProject
                             $"\nWould you like to save your progress?");
                         Prompt($"Enter 'y' if you would like to save\nEnter 'n' if you would like to quit without saving");
                         string saveOrQuit = Console.ReadLine().ToLower().Trim();
-                        switch (saveOrQuit)
+                        if (saveOrQuit == "y")
                         {
                             // if yes, saves the files with players name serving as the heading
-                            case"y":
-                                {                               
-                                    using (var writer = new StreamWriter($"{player.name}weap.csv"))
-                                    using (var csv = new CsvWriter(writer, CultureInfo.InvariantCulture))
-                                    {
-                                        csv.WriteRecords(myWeaps);
-                                    }
-                                    Prompt($"...");
-                                    Prompt($"Player weapon inventory file saved as {player.name}weap.csv\n");
-                                }
-                                {
-                                    using (var writer = new StreamWriter($"{player.name}armor.csv"))
-                                    using (var csv = new CsvWriter(writer, CultureInfo.InvariantCulture))
-                                    {
-                                        csv.WriteRecords(myArmors);
-                                    }
-                                    Prompt($"...");
-                                    Prompt($"Player armor inventory file saved as {player.name}armor.csv\n");
-                                }
-                                {
-                                    using (var writer = new StreamWriter($"{player.name}ShopWeaponSave.csv"))
-                                    using (var csv = new CsvWriter(writer, CultureInfo.InvariantCulture))
-                                    {
-                                        csv.WriteRecords(weaponList);
-                                    }
-                                    Prompt($"...");
-                                    Prompt($"Shop weapon file saved as {player.name}ShopWeaponSave.csv\n");
-                                }
-                                {
-                                    using (var writer = new StreamWriter($"{player.name}ShopArmorSave.csv"))
-                                    using (var csv = new CsvWriter(writer, CultureInfo.InvariantCulture))
-                                    {
-                                        csv.WriteRecords(armorList);
-                                    }
-                                    Prompt($"...");
-                                    Prompt($"Shop armor file saved as {player.name}ShopArmorSave.csv\n");
-                                }
-                                Prompt($"Please come again!");
-                                gameRunning = false;
-                                break;
+                            // player weapon save
+                            using (var writer = new StreamWriter($"{player.name}weap.csv"))
+                            using (var csv = new CsvWriter(writer, CultureInfo.InvariantCulture))
+                            {
+                                csv.WriteRecords(myWeaps);
+                            }
+                            Prompt($"...");
+                            Prompt($"Player weapon inventory file saved as {player.name}weap.csv\n");
 
-                            case "n":
-                                Prompt($"Please come again!");
-                                gameRunning = false;
-                                break;                         
+                            // player armor save
+                            using (var writer = new StreamWriter($"{player.name}armor.csv"))
+                            using (var csv = new CsvWriter(writer, CultureInfo.InvariantCulture))
+                            {
+                                csv.WriteRecords(myArmors);
+                            }
+                            Prompt($"...");
+                            Prompt($"Player armor inventory file saved as {player.name}armor.csv\n");
+
+                            // shop weap inv save
+                            using (var writer = new StreamWriter($"{player.name}ShopWeaponSave.csv"))
+                            using (var csv = new CsvWriter(writer, CultureInfo.InvariantCulture))
+                            {
+                                csv.WriteRecords(weaponList);
+                            }
+                            Prompt($"...");
+                            Prompt($"Shop weapon file saved as {player.name}ShopWeaponSave.csv\n");
+
+                            // shop inv armor save
+                            using (var writer = new StreamWriter($"{player.name}ShopArmorSave.csv"))
+                            using (var csv = new CsvWriter(writer, CultureInfo.InvariantCulture))
+                            {
+                                csv.WriteRecords(armorList);
+                            }
+                            Prompt($"...");
+                            Prompt($"Shop armor file saved as {player.name}ShopArmorSave.csv\n");
+
+                            Prompt($"Please come again!");
+                            gameRunning = false;
+                            break;
+                        }
+                        else if (saveOrQuit == "n")
+                        {
+                            Prompt($"\nProgress not saved...");
+                            Prompt($"Please come again!");
+                            gameRunning = false;
+                            break;
                         }
                         break;
-                   
+                  
+                
+                              
                     // asks user to enter name for player weap and armor inv load
                     case "load":          
                         bool loading = true;
@@ -408,6 +411,7 @@ namespace CSharpAssessmentProject
                             {
                                 try
                                 {
+                                    // shop weapon inv load
                                     using (var reader = new StreamReader($"{player.name}ShopWeaponSave.csv"))
                                     {
                                         using (var csv = new CsvReader(reader, CultureInfo.InvariantCulture))
@@ -415,6 +419,7 @@ namespace CSharpAssessmentProject
                                             weaponList = csv.GetRecords<Weapon.WeaponStruct>().ToList<Weapon.WeaponStruct>();
                                         }
                                     }
+                                    // shop armor inv load
                                     using (var reader = new StreamReader($"{player.name}ShopArmorSave.csv"))
                                     {
                                         using (var csv = new CsvReader(reader, CultureInfo.InvariantCulture))
