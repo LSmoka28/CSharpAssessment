@@ -10,8 +10,8 @@ namespace CSharpAssessmentProject
     public class Player
     {
         
-        string name;
-        Address address;       
+        public string name;
+        public Address address;       
         public Player(string name, Address address)
         {
             this.address = address;
