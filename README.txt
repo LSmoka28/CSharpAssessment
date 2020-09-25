@@ -13,5 +13,7 @@ Controls and instructions are included in the application
 Type commands into the console to "shop" the store
 Type "help" into the command line to see a list of valid commands
 
+Link to GitHub repository: https://github.com/LSmoka28/CSharpAssessment
+
 Project created and maintained by Larry Hurley
 Class of 2022, AIE Seattle, Game Programming
