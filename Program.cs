@@ -62,8 +62,8 @@ namespace CSharpAssessmentProject
             // store intro message
             Prompt($"Welcome to Fantasy Fanatics!\n" +
                 $"I have a wide variety of items once belonging to video games, comics, and movies\n" +
-                $"Dont ask how I got them, just enjoy it while you can\n" +
-                $"Dont hesitate to ask for 'help' if you need any assistance!\n");
+                $"Don't ask how I got them, just enjoy it while you can\n" +
+                $"Don't hesitate to ask for 'help' if you need any assistance!\n");
             Prompt($"First things first,");
 
             // get player name and location, and check to confirm with player
@@ -217,7 +217,7 @@ namespace CSharpAssessmentProject
                     case "commands":
                     case "inputs":
                     case "h":
-                        Prompt($"Use the valid commands below to shop the store\n" +
+                        Prompt($"\nUse the valid commands below to shop the store\n" +
                             $"Be sure to press your Enter/Return key after each command\n" +
                             $"And remember to type 'help' if you get stuck");
                         Prompt($"__________________\nThe current valid commands you can type in are: \n" +
@@ -232,7 +232,7 @@ namespace CSharpAssessmentProject
                             $"- shop inv, shop, show, look - shows the full available shop inventory and prices\n" +
                             $"- sell, trade - sell items back to the shop. for a weapon: type (w1-w10) or an armor: type (a1-a10) \n" +
                             $"- commands, inputs, help, h  - shows this help screen and game instructions \n" +
-                            $"- esc, quit, leave, save - asks the user to save files or quit without saving\n");
+                            $"- esc, quit, leave, save - asks to save files or quit without saving\n");
                         break;
 
                     // quit or save
@@ -243,8 +243,8 @@ namespace CSharpAssessmentProject
                     case "leave":
                     case "save":
                         Prompt($"\nThank you for shopping with us! You ended with " +
-                            $"{myWeaps.Count} weapon(s), and {myArmors.Count} piece(s) of armor.\n" +
-                            $"Would you like to save your progress?");
+                            $"{myWeaps.Count} weapon(s), and {myArmors.Count} piece(s) of armor\n" +
+                            $"\nWould you like to save your progress?");
                         Prompt($"Enter 'y' if you would like to save\nEnter 'n' if you would like to quit without saving");
                         string saveOrQuit = Console.ReadLine().ToLower().Trim();
                         switch (saveOrQuit)
@@ -358,8 +358,6 @@ namespace CSharpAssessmentProject
                             // loading armor. if no armor file loaded, clear loaded weapon file, exit loop and print error
                             if (armorLoad)
                             {
-                                Prompt($"What armor save are you trying to load? Just enter the file name, no extension required\n");
-                                
                                 while (armorLoad)
                                 {
                                     try
@@ -469,7 +467,7 @@ namespace CSharpAssessmentProject
                                 {
 
                                     Prompt($"You entered an invalid weapon selection\n" +
-                                        $"Please pick again and dont forget to check the weapon list to see what numbers correspond to each weapon\n" +
+                                        $"Please pick again and dont forget to check the weapon list to see what number corresponds to each weapon\n" +
                                         $"_______________");
                                 }
                                 break;
@@ -486,7 +484,7 @@ namespace CSharpAssessmentProject
                                 catch (ArgumentOutOfRangeException)
                                 {
                                     Prompt($"You entered an invalid armor selection\n" +
-                                       $"Please pick again and dont forget to check the armor list to see what numbers correspond to each armor\n" +
+                                       $"Please pick again and dont forget to check the armor list to see what number corresponds to each armor\n" +
                                        $"_______________");
                                 }
                                 break;
@@ -774,7 +772,7 @@ namespace CSharpAssessmentProject
             foreach (Armor.ArmorStruct myInv in myArmors)
             {
                 numOfArmor++;
-                Prompt($"-Armor a{numOfArmor}-");
+                Prompt($"Armor (a{numOfArmor})");
                 armor.ToString(myInv.Name, myInv.Type, myInv.Info, myInv.Defense, myInv.Rarity, myInv.Price);
             }           
             Prompt($"\n     ^^^^^^^^    \n----MY ARMOR----\n");
