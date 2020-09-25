@@ -8,7 +8,7 @@ Building this project requires Visual Studio 2019 or newer
 This is developed for .NET Framework 4.7.2 and primarily supports windows. Adjustment may be needed for other platforms
 
 To Build: Close the repository and open the solution in Visual Studio. 
-This project uses Csvhelper so, "Restore NuGet Packages" might be needed after initial clone
+This project uses Csvhelper so "Restore NuGet Packages" might be needed after initial clone
 Both the soultion and project should be configured and ready to build.
 Ctrl + Shift + B should build the project with no extra steps needed.
 
