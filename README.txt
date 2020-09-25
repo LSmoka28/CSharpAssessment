@@ -13,7 +13,9 @@ Controls and instructions are included in the application
 Type commands into the console to "shop" the store
 Type "help" into the command line to see a list of valid commands
 
-Link to GitHub repository: https://github.com/LSmoka28/CSharpAssessment
+Link to GitHub repository: I was working in the first repo for a while but eventually moved the project into its own solution
+1). https://github.com/LSmoka28/IntroductionToCSharp/tree/master/ConsoleProjTemp
+2). https://github.com/LSmoka28/CSharpAssessment
 
 Project created and maintained by Larry Hurley
 Class of 2022, AIE Seattle, Game Programming
