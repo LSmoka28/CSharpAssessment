@@ -768,14 +768,14 @@ namespace CSharpAssessmentProject
         {
             Item armor = new Armor();
             int numOfArmor = 0;
-            Prompt($"\n----MY ARMOR----\n     vvvvvvvv    \n");
+            Prompt($"\n----MY ARMOR----\n     vvvvvv    \n");
             foreach (Armor.ArmorStruct myInv in myArmors)
             {
                 numOfArmor++;
                 Prompt($"Armor (a{numOfArmor})");
                 armor.ToString(myInv.Name, myInv.Type, myInv.Info, myInv.Defense, myInv.Rarity, myInv.Price);
             }           
-            Prompt($"\n     ^^^^^^^^    \n----MY ARMOR----\n");
+            Prompt($"\n     ^^^^^^    \n----MY ARMOR----\n");
         }
         #endregion
 
