@@ -18,7 +18,7 @@ namespace CSharpAssessmentProject
         static public int shopBank = 1000;
         static public int playerBank = 1000;
 
-        // variable for psuedo count of weapons and armor
+        // variable for numbering of weapons and armor
         static public int weaponNumber = 0;
         static public int armorNumber = 0;
 
@@ -33,6 +33,7 @@ namespace CSharpAssessmentProject
             Armor.ArmorStruct[] shopArmorInv;
 
             // using csvhelper load .csv files before list conversion
+            // loads weapons into shop inv from specified .csv
             using (var reader = new StreamReader("WeaponsSpread1.csv"))
             {
                 using (var csv = new CsvReader(reader, CultureInfo.InvariantCulture))
@@ -41,6 +42,8 @@ namespace CSharpAssessmentProject
                     shopWeapInv = weaps.ToArray<Weapon.WeaponStruct>();
                 }
             }
+
+            // loads armor into shop inv from specified .csv
             using (var reader = new StreamReader("armor.csv"))
             {
                 using (var csv = new CsvReader(reader, CultureInfo.InvariantCulture))
@@ -70,7 +73,6 @@ namespace CSharpAssessmentProject
             bool gettingName = false;
             while (!gettingName)
             {
-
                 // get player name and location
                 Prompt($"May I have your name, please? It is for my records...");
                 string name = Console.ReadLine().Trim();
@@ -112,7 +114,7 @@ namespace CSharpAssessmentProject
             bool gameRunning = true;
             while (gameRunning)
             {
-                Prompt($"What would you like to do, {player.name}?");
+                Prompt($"What would you like to do?");
                 string input = Console.ReadLine().Trim().ToLower();
 
                 // must include 'true' inputCommandDealtWith on each case calling a Show or PlayerInv method
@@ -235,9 +237,7 @@ namespace CSharpAssessmentProject
                             $"- esc, quit, leave, save - asks to save files or quit without saving\n");
                         break;
 
-                    // quit or save
-                    // asks user to save
-
+                    // quit or save progress
                     case "esc":
                     case "quit":
                     case "leave":
@@ -249,6 +249,7 @@ namespace CSharpAssessmentProject
                         string saveOrQuit = Console.ReadLine().ToLower().Trim();
                         switch (saveOrQuit)
                         {
+                            // if yes, saves the files with players name serving as the heading
                             case"y":
                                 {                               
                                     using (var writer = new StreamWriter($"{player.name}weap.csv"))
@@ -296,9 +297,8 @@ namespace CSharpAssessmentProject
                                 break;                         
                         }
                         break;
-
-                    // loads last saved shop inventory
-                    // asks user to enter a load file for player weap and armor inv
+                   
+                    // asks user to enter name for player weap and armor inv load
                     case "load":          
                         bool loading = true;
                         while (loading)
