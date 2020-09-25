@@ -9,9 +9,10 @@ namespace CSharpAssessmentProject
 {
     public class Player
     {
-        
+        // holds player name and address class
         public string name;
         public Address address;       
+
         public Player(string name, Address address)
         {
             this.address = address;

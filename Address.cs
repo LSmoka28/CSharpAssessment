@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 
 namespace CSharpAssessmentProject
 {
+    // holds player location
     public class Address
     {
         public string city;

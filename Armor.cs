@@ -9,6 +9,7 @@ namespace CSharpAssessmentProject
 {
     class Armor : Item
     {
+        // struct to hold values from armor csv
         public struct ArmorStruct
         {
             private string name;
