@@ -92,7 +92,7 @@ namespace CSharpAssessmentProject
 
                     // display PlayerID and ask to confirm
                     player.Display();
-                    Prompt($"Your name will be used for your save files\nIs this correct? ('y' or 'n')");
+                    Prompt($"\nYour name will be used for your save files\nIs this correct? ('y' or 'n')");
                     if (Console.ReadLine().Trim().ToLower() == "y")
                     {                      
                         Prompt($"\nWelcome, {name}!\n");
@@ -158,7 +158,7 @@ namespace CSharpAssessmentProject
                     case "i":
                         PlayerWeaponInv(myWeaps);
                         PlayerArmorInv(myArmors);
-                        Prompt($"Bank: {playerBank} units");
+                        Prompt($"Bank: {playerBank} units\n");
                         inputCommandDealtWith = true;
                         break;
 
@@ -218,13 +218,13 @@ namespace CSharpAssessmentProject
                     case "inputs":
                     case "h":
                         Prompt($"\nUse the valid commands below to shop the store\n" +
-                            $"Be sure to press your Enter/Return key after each command\n" +
+                            $"Don't forget to press your Enter/Return key after each command\n" +
                             $"And remember to type 'help' if you get stuck");
                         Prompt($"__________________\nThe current valid commands you can type in are: \n" +
                             $"- y - confirm a selection \n" +
                             $"- n - decline a selection \n" +
-                            $"- w1-w10 - use w and a corresponding number 1-10, to view a weapon in that slot\n" +
-                            $"- a1-a10 - use a and a corresponding number 1-10, to view an armor in that slot\n" +
+                            $"- w1-w10 - use 'w' and a corresponding number '1-10', to view a weapon in that slot\n" +
+                            $"- a1-a10 - use 'a' and a corresponding number '1-10', to view an armor in that slot\n" +
                             $"- load - loads a .csv file for shop inv and a user inv by input of name used for save\n" +
                             $"- show armor, show a, armor, arm  - shows current shop armor inventory and prices \n" +
                             $"- weapons, show weap, show w, weap - shows current shop weapon inventory and prices \n" +
