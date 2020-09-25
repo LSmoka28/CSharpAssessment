@@ -290,6 +290,7 @@ namespace CSharpAssessmentProject
                             gameRunning = false;
                             break;
                         }
+                        // exit game without saving 
                         else if (saveOrQuit == "n")
                         {
                             Prompt($"\nProgress not saved...");
@@ -298,9 +299,7 @@ namespace CSharpAssessmentProject
                             break;
                         }
                         break;
-                  
-                
-                              
+                                                
                     // asks user to enter name for player weap and armor inv load
                     case "load":          
                         bool loading = true;
@@ -439,13 +438,10 @@ namespace CSharpAssessmentProject
                                         $"Please make sure there is a save file to load and try again\n" +
                                         $"There is a possibility the last game progress wasnt saved\n");
                                     break;
-                                 
                                 }                                                              
                             }
                         }
-                        break;
-                    
-
+                        break;                   
                 }
                 // gets 'a' or 'w' for choosing an item to view
                 // removes 'a' or 'w' to get number associated with proper inventory
